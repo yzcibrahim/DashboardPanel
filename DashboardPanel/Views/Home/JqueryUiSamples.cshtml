@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewData["Title"] = "JqueryUiSamples";
+}
+
+<h1>JqueryUiSamples</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <div test="decl" id="widget1" style="border:1px solid black" class="ui-widget ui-widget-content">bilmemne Widget</div>
+    </div>
+
+    <div style="border:1px solid black;height:1000px"   id="droppable" class="col-md-9">
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+          
+            $('#widget1').draggable({ revert: true, helper: "clone" });
+
+            //$("#widget1").resizable();
+
+            $("#droppable").droppable({
+                drop: function (event, ui) {
+                    var droppable = $(this);
+                    var draggable = ui.draggable;
+                    var newPosX = ui.offset.left - $(this).offset().left;
+                    var newPosY = ui.offset.top - $(this).offset().top;
+                   
+
+                    if (draggable[0].getAttribute("test") == 'decl') {
+                        var res_clone = draggable.clone();
+                        res_clone.attr("test", "conc");
+                        jQuery(res_clone).attr('id', 'res_clone');
+
+                        jQuery(res_clone).appendTo(droppable);
+
+                        jQuery(res_clone).css("position", "absolute").css("left", newPosX).css("top", newPosY);
+                        //  jQuery(res_clone).find('.ui-resizable-handle').remove();
+                        jQuery(res_clone).draggable();
+                        jQuery(res_clone).resizable();
+                    }
+
+                }
+            });
+        });
+
+
+       
+    </script>
+}
+

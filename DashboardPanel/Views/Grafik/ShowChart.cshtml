@@ -1,0 +1,56 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Grafik;
+
+<div class="row">
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <canvas id="myChart"></canvas>
+
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        const labels = [];
+        const dataArr = [];
+        const colors = [];
+
+        @foreach(var item in Model.GrafikDatas)
+                {
+            <Text>
+        labels.push('@item.Anahtar');
+        dataArr.push(@item.Value);
+        colors.push('@item.ColorCode');
+            </Text>
+
+                }
+
+        @if(Model.Tip==0)
+                {
+                    <Text>
+         CreatePieChart(labels, dataArr, '@Model.Isim', 'myChart', colors);
+                    </Text>
+                }
+        else if (Model.Tip == 1)
+        {
+            <Text>
+        CreateLineChart(labels, dataArr, '@Model.Isim', 'myChart');
+            </Text>
+        }
+        else if (Model.Tip == 2)
+        {
+            <Text>
+        CreateBarChart(labels, dataArr, '@Model.Isim', 'myChart', colors);
+            </Text>
+        }
+    </script>
+}

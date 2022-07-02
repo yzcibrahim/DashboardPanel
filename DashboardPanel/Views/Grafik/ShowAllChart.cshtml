@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewData["Title"] = "ShowAllChart";
+}
+@model IEnumerable<Grafik>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 10px;
+            padding: 10px;
+        }
+
+            .grid-container > div {
+                text-align: center;
+                padding: 20px 0;
+                font-size: 30px;
+            }
+    </style>
+<div class="grid-container">
+    @foreach (var item in Model)
+    {
+        string elementId = "chrt_" + item.Id;
+
+
+    <div class="grid-item" style="position: relative;margin: auto" > 
+        <canvas id="@elementId" height="300"  ></canvas>
+    </div>
+      
+        @*<div class="row">
+            <div class="col-md-6">
+                <canvas id="@elementId"></canvas>
+                @Html.Raw(item.Isim)
+            </div>
+        </div>*@
+    }
+</div>
+
+        @section Scripts{
+            <script>
+
+        var labels = [];
+        var dataArr = [];
+        var colors = [];
+
+@foreach (var grafik in Model)
+{
+    string elementId = "chrt_" + grafik.Id;
+            <Text>
+                labels = [];
+                dataArr = [];
+                colors = [];
+            </Text>
+        @foreach (var item in grafik.GrafikDatas)
+        {
+            <Text>
+        labels.push('@Html.Raw(item.Anahtar)');
+        dataArr.push(@item.Value);
+        colors.push('@item.ColorCode');
+            </Text>
+
+                }
+
+        @if(grafik.Tip==0)
+                {
+                    <Text>
+         CreatePieChart(labels, dataArr, '@grafik.Isim', '@elementId', colors);
+                    </Text>
+                }
+        else if (grafik.Tip == 1)
+        {
+            <Text>
+        CreateLineChart(labels, dataArr, '@grafik.Isim', '@elementId');
+            </Text>
+        }
+        else if (grafik.Tip == 2)
+        {
+            <Text>
+        CreateBarChart(labels, dataArr, '@grafik.Isim', '@elementId', colors);
+            </Text>
+        }
+	}
+
+            </script>
+
+        }
+

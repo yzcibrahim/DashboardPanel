@@ -1,0 +1,54 @@
+﻿@model IEnumerable<DashboardPanel.Entities.GrafikData>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Anahtar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ColorCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GrafikId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Anahtar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Value)
+            </td>
+            <td>
+                <span style="background-color:@item.ColorCode; color:white">@item.ColorCode</span>
+               
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GrafikId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.GrafikId, dataId = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
