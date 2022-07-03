@@ -17,5 +17,8 @@ namespace DashboardPanel.Contexts
 
         public DbSet<GrafikData> GrafikDatas { get; set; }
 
+        public DbSet<DashBoard> DashBoards { get; set; }
+
+        public DbSet<DashBoardWidget> DashBoardWidgets { get; set; }
     }
 }

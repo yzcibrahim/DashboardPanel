@@ -50,7 +50,7 @@ namespace DashboardPanel
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=JqueryUiSamples}/{id?}");
+                    pattern: "{controller=Dashboard}/{action=Dashboards}/{id?}");
             });
         }
     }

@@ -4,14 +4,16 @@ using DashboardPanel.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DashboardPanel.Migrations
 {
     [DbContext(typeof(GrafikDbContext))]
-    partial class GrafikDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220703062752_dashboard")]
+    partial class dashboard
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,18 +48,6 @@ namespace DashboardPanel.Migrations
 
                     b.Property<int>("GrafikId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Height")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Left")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Top")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Width")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

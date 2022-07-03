@@ -1,0 +1,167 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@model DashViewModel
+
+
+<h1>Index</h1>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+        <input type="hidden" id="DashId" value="@Model.Dash?.Id" />
+        İsim:<input type="text" id="dashName" value="@Model.Dash?.Isim" class="form-control" />
+    </div>
+    <button class="btn btn-success" onclick="saveDash()">Kaydet</button>
+</div>
+<div class="row">
+    <div class="col-md-3">
+       @foreach(var widget in Model.Widgets)
+            {
+                <div id="widget_@widget.Id" widgetId="@widget.Id" 
+                     style="border:1px solid black; 
+                    margin-bottom:2px;
+                  "> 
+                @widget.Isim
+                </div>
+            }
+    </div>
+    <div id="droppable" class="col-md-9" style="border:1px solid black;height:800px">
+        @if (Model.Dash != null)
+        {
+            foreach (var item in Model.Dash.DashBoardWidgets)
+            {
+        <div id="widgetC_@item.GrafikId" widgetid="@item.GrafikId"
+             style="border: 1px solid black;
+             margin-bottom: 2px; position: absolute;
+             left: @item.LeftPx; top:
+            @item.TopPx; height:@Html.Raw(item.Height + "px");
+             width:@Html.Raw(item.Width+"px")"
+            clonned="true">
+            @item.Graf.Isim
+           
+        </div>
+            }
+        }
+
+        @*@if (Model.Dash != null)
+        {
+            foreach (var dw in Model.Dash.DashBoardWidgets)
+            {
+                <Text>
+        <div id="widget_@dw.GrafikId" widgetid="@dw.GrafikId" style="border: 1px solid black; margin-bottom: 2px; position: absolute; left: @dw.LeftPx; top: @dw.TopPx;" class="ui-draggable ui-draggable-handle ui-resizable"
+             clonned="true"> @dw.Graf.Isim
+        <div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div></div>
+                </Text>
+            }
+        }*@
+    </div>
+
+</div>
+
+
+@section Scripts
+{
+    <script>
+
+    function saveDash() {
+        //$("#droppable").children.Foreach()
+
+        var widgetList = [];
+        var liste = $('#droppable')[0].children;
+        for (var i = 0; i < liste.length; i++) {
+
+            widgetList.push({
+                height: liste[i].offsetHeight,
+                width: liste[i].offsetWidth,
+                top: liste[i].offsetTop,
+                left: liste[i].offsetLeft,
+                widgetId: liste[i].getAttribute("widgetid")
+            });
+
+        }
+
+        var data = {
+            isim: $('#dashName').val(),
+            widList: widgetList,
+            DashId: $('#DashId').val()
+        }
+
+
+        $.post("/Dashboard/saveDash", data, function (data) {  alert("kaydedildi")});
+
+
+        console.log(widgetList);
+    }
+
+    @foreach(var item in Model.Widgets)
+                {
+        <Text>
+        $('#widget_@item.Id').draggable({ helper: "clone", revert: true, cursor: "grabbing" });
+    </Text>
+                }
+
+    $(document).ready(function () {
+
+        @if (Model.Dash != null)
+                {
+                    foreach (var item in Model.Dash.DashBoardWidgets)
+                    {
+                <Text>
+        $("#widgetC_@item.GrafikId").draggable();
+        $("#widgetC_@item.GrafikId").resizable();
+                </Text>
+                    }
+                }
+
+        $("#droppable").droppable({
+                drop: function (event, ui) {
+                var droppable = $(this);
+                var draggable = ui.draggable;
+                var newPosX = ui.offset.left - $(this).offset().left;
+                var newPosY = ui.offset.top - $(this).offset().top;
+
+
+
+
+                if (!draggable[0].getAttribute("clonned")) {
+                    var res_clone = draggable.clone();
+                    $(res_clone).attr("clonned", "true");
+                    $("#droppable").append(res_clone);
+
+                    $(res_clone).css("position", "absolute").css("left", newPosX).css("top", newPosY);
+
+                    $(res_clone).draggable(
+                        {
+                            stop: function (event, uiDrg) {
+
+                                console.log("dragged left:" + uiDrg.offset.left);
+                                console.log("dragged top:" + uiDrg.offset.top);
+
+                                console.log("ui.offset.left" + ui.offset.left);
+                                console.log("$(this).offset().left" + $(this).offset().left);
+                              //  if (uiDrg.offset.left<)
+
+                                if (uiDrg.offset.left < $(this).offset().left) {
+                                    $(res_clone).remove();
+                                }
+
+                                if (uiDrg.offset.top < $(this).offset().top) {
+                                    $(res_clone).remove();
+                                }
+
+                            }
+                        }
+                    );
+                    $(res_clone).resizable();
+                }
+               
+            }
+            });
+
+    })
+
+
+    </script>
+}

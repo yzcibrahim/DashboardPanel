@@ -1,0 +1,70 @@
+﻿@model DashBoard
+@{
+    ViewData["Title"] = "Open";
+}
+
+<h1>Open</h1>
+
+<div class="row">
+    <div id="panel" class="col-md-9">
+
+        @foreach (var item in Model.DashBoardWidgets)
+        {
+            string elementId="widget_"+item.Id;
+         
+            <div  style="position: absolute;left:@item.LeftPx;top:@item.TopPx;margin: auto">
+                <canvas id="@elementId" height="@item.HeightPx" width="@item.WidthPx"></canvas>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+             var labels = [];
+        var dataArr = [];
+        var colors = [];
+
+@foreach (var grafik in Model.DashBoardWidgets)
+{
+    string elementId = "widget_" + grafik.Id;
+            <Text>
+                labels = [];
+                dataArr = [];
+                colors = [];
+            </Text>
+        @foreach (var item in grafik.Graf.GrafikDatas)
+        {
+            <Text>
+        labels.push('@Html.Raw(item.Anahtar)');
+        dataArr.push(@item.Value);
+        colors.push('@item.ColorCode');
+            </Text>
+
+          }
+
+        @if(grafik.Graf.Tip==0)
+                {
+                    <Text>
+         CreatePieChart(labels, dataArr, '@grafik.Graf.Isim', '@elementId', colors);
+                    </Text>
+                }
+        else if (grafik.Graf.Tip == 1)
+        {
+            <Text>
+        CreateLineChart(labels, dataArr, '@grafik.Graf.Isim', '@elementId');
+            </Text>
+        }
+        else if (grafik.Graf.Tip == 2)
+        {
+            <Text>
+        CreateBarChart(labels, dataArr, '@grafik.Graf.Isim', '@elementId', colors);
+            </Text>
+        }
+	}
+
+
+    </script>
+
+}
+
