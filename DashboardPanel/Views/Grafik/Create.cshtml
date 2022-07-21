@@ -24,8 +24,39 @@
             </div>
             <div class="form-group">
                 <label asp-for="Tip" class="control-label"></label>
-                <input asp-for="Tip" class="form-control" />
+
+                @{
+
+                }
+
+                <select class="form-control" id="Tip" name="Tip">
+                    <option value="-1">Seçiniz</option>
+                    <option value="0">Pasta</option>
+                    <option value="1">Bar</option>
+                    <option value="2">Line</option>
+                </select>
+
                 <span asp-validation-for="Tip" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WidgetTip" class="control-label"></label>
+
+                @{
+
+                }
+
+                <select class="form-control" id="WidgetTip" name="WidgetTip">
+                    <option value="-1">Seçiniz</option>
+                    <option value="0">Statik</option>
+                    <option value="1">Sql Sorgu</option>
+                </select>
+
+                <span asp-validation-for="WidgetTip" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SqlQuery" class="control-label"></label>
+                <input asp-for="SqlQuery" class="form-control" />
+                <span asp-validation-for="SqlQuery" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Kaydet" class="btn btn-primary" />
@@ -40,4 +71,15 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    $().ready(function () {
+        $('#Tip').val(@Model.Tip)
+    });
+
+    $().ready(function () {
+        $('#WidgetTip').val(@Model.WidgetTip)
+    });
+</script>
+
 }

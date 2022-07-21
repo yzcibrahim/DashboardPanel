@@ -2,9 +2,11 @@
 using DashboardPanel.Entities;
 using DashboardPanel.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -97,6 +99,79 @@ namespace DashboardPanel.Controllers
         public IActionResult Open(int id)
         {
             var model = _context.DashBoards.Include(c => c.DashBoardWidgets).ThenInclude(c => c.Graf).ThenInclude(c => c.GrafikDatas).First(c => c.Id == id);
+
+            List<string> colors = new List<string>() { "#FF0000", "#00FF00", "#0000FF" };
+
+            ///
+           
+            ///
+
+            foreach (var item in model.DashBoardWidgets.Where(c => c.Graf.WidgetTip == 1))
+            {
+                
+                var dt = new DataTable();
+                var conn = _context.Database.GetDbConnection();
+                var connectionState = conn.State;
+                try
+                {
+                    if (connectionState != ConnectionState.Open)
+                        conn.Open();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = item.Graf.SqlQuery;
+                        cmd.CommandType = CommandType.Text;
+                       
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            dt.Load(reader);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // error handling
+                    throw;
+                }
+                finally
+                {
+                    if (connectionState != ConnectionState.Closed) conn.Close();
+                }
+
+                List<GrafikData> dataList = new List<GrafikData>();
+
+                int colorIndex = 0;
+                foreach (DataRow dr in dt.Rows)
+                {
+                    dataList.Add(new GrafikData()
+                    {
+                        Id = 0,
+                        Anahtar = dr[1].ToString(),
+                        Value = Convert.ToDouble(dr[2].ToString()),
+                        ColorCode= colors[colorIndex]
+                    });
+
+                    colorIndex++;
+                }
+                item.Graf.GrafikDatas = dataList;
+
+            }
+
+            //foreach (var item in model.DashBoardWidgets.Where(c => c.Graf.WidgetTip == 1))
+            //{
+            //    item.Graf.GrafikDatas = _context.GrafikDatas.FromSqlRaw(item.Graf.SqlQuery).ToList();
+
+            //    int colorIndex = 0;
+            //    foreach (var datas in item.Graf.GrafikDatas)
+            //    {
+            //        datas.ColorCode = colors[colorIndex];
+            //        colorIndex++;
+            //    }
+
+            //    colorIndex = 0;
+            //}
+
+
+
             return View(model);
         }
     }

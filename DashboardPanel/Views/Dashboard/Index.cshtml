@@ -32,16 +32,45 @@
         {
             foreach (var item in Model.Dash.DashBoardWidgets)
             {
-        <div id="widgetC_@item.GrafikId" widgetid="@item.GrafikId"
-             style="border: 1px solid black;
-             margin-bottom: 2px; position: absolute;
-             left: @item.LeftPx; top:
-            @item.TopPx; height:@Html.Raw(item.Height + "px");
-             width:@Html.Raw(item.Width+"px")"
-            clonned="true">
-            @item.Graf.Isim
-           
-        </div>
+
+                if (item.Graf.WidgetTip == 1)
+                {
+                    string query = item.Graf.SqlQuery;
+                    string dynParameter = "";
+                    if(query.Contains("{") && query.Contains("}"))
+                    {
+                        dynParameter = query.Substring(query.IndexOf("{")+1, query.IndexOf("}") - query.IndexOf("{")-1);
+                    }
+
+                    <div id="widgetC_@item.GrafikId" widgetid="@item.GrafikId"
+                         style="border: 1px solid black;
+                     margin-bottom: 2px; position: absolute;
+                left: @item.LeftPx; top:
+                    @item.TopPx; height:@Html.Raw(item.Height + "px");
+                width:@Html.Raw(item.Width + "px")"
+                         clonned="true">
+                        @item.Graf.Isim
+                        <label>@dynParameter :</label>
+                        <input class="form-control" type="text"  value="asdasd" />
+
+
+                    </div>
+
+                }
+                else
+                {
+
+                    <div id="widgetC_@item.GrafikId" widgetid="@item.GrafikId"
+                         style="border: 1px solid black;
+                     margin-bottom: 2px; position: absolute;
+                     left: @item.LeftPx; top:
+                    @item.TopPx; height:@Html.Raw(item.Height + "px");
+                     width:@Html.Raw(item.Width + "px")"
+                         clonned="true">
+                        @item.Graf.Isim
+
+                    </div>
+                }
             }
         }
 

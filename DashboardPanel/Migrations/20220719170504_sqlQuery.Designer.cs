@@ -4,14 +4,16 @@ using DashboardPanel.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DashboardPanel.Migrations
 {
     [DbContext(typeof(GrafikDbContext))]
-    partial class GrafikDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220719170504_sqlQuery")]
+    partial class sqlQuery
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,6 +81,7 @@ namespace DashboardPanel.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SqlQuery")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Tip")

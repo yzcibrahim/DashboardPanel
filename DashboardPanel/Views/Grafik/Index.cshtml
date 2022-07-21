@@ -21,6 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Tip)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WidgetTip)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -34,11 +37,14 @@
                 @Html.DisplayFor(modelItem => item.Isim)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tip)
+                @Html.DisplayFor(modelItem => item.TipAciklama)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Create", new {  id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new {  id=item.Id }) |
+                @Html.DisplayFor(modelItem => item.WidgetTipAciklama)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Create", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>

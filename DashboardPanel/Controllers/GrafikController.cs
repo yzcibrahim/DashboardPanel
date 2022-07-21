@@ -29,7 +29,7 @@ namespace DashboardPanel.Controllers
             {
                 return View(_context.Grafiks.FirstOrDefault(c => c.Id == id.Value));
             }
-
+           
             return View(new Grafik());
         }
 
@@ -86,6 +86,14 @@ namespace DashboardPanel.Controllers
             return RedirectToAction("Details", new { id = model.GrafikId });
         }
 
+        public IActionResult AddGrafikQuery(int id,string SqlQuery)
+        {
+            var model = _context.Grafiks.First(c => c.Id == id);
+            model.SqlQuery = SqlQuery;
+            _context.SaveChanges();
+            return RedirectToAction("Details", new { id = id });
+        }
+
         public IActionResult Edit(int id, int dataId)
         {
             Grafik model = _context.Grafiks.Include(x => x.GrafikDatas).FirstOrDefault(c => c.Id == id);
@@ -98,12 +106,38 @@ namespace DashboardPanel.Controllers
         public IActionResult ShowChart(int id)
         {
             Grafik grph = _context.Grafiks.Include(c=>c.GrafikDatas).First(c=>c.Id==id);
+            grph.GrafikDatas = new List<GrafikData>();
+
+            grph.GrafikDatas=_context.GrafikDatas.FromSqlRaw(grph.SqlQuery).ToList();
+
+
             return View(grph);
         }
 
+
+
         public IActionResult ShowAllChart()
         {
+
+            List<string> colors = new List<string>() { "#FF0000", "#00FF00", "#0000FF" };
+
             List<Grafik> model = _context.Grafiks.Include(c => c.GrafikDatas).ToList();
+
+            foreach(var item in model.Where(c=>c.WidgetTip==1))
+            {
+                item.GrafikDatas = _context.GrafikDatas.FromSqlRaw(item.SqlQuery).ToList();
+
+                int colorIndex = 0;
+                foreach(var datas in item.GrafikDatas)
+                {
+                    datas.ColorCode = colors[colorIndex];
+                    colorIndex++;
+                }
+
+                colorIndex = 0;
+            }
+
+
             return View(model);
         }
     }

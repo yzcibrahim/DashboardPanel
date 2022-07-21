@@ -4,14 +4,16 @@ using DashboardPanel.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DashboardPanel.Migrations
 {
     [DbContext(typeof(GrafikDbContext))]
-    partial class GrafikDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220719164054_widgetType")]
+    partial class widgetType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,9 +78,6 @@ namespace DashboardPanel.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Isim")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SqlQuery")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Tip")
